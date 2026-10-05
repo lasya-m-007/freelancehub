@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Admin Dashboard - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <h3 class="mb-3">Admin Dashboard</h3>
+    <div class="row g-3 mb-3">
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Users', ${totalUsers}, 'primary')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Clients', ${clientCount}, 'dark')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Freelancers', ${freelancerCount}, 'dark')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Categories', ${totalCategories}, 'secondary')}"></div></div>
+    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Projects', ${totalProjects}, 'primary')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Open', ${openProjects}, 'success')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('In progress', ${inProgressProjects}, 'warning')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Bids', ${totalBids}, 'secondary')}"></div></div>
+    </div>
+    <a class="btn btn-primary me-2" th:href="@{/admin/users}">Manage users</a>
+    <a class="btn btn-outline-primary" th:href="@{/admin/categories}">Manage categories</a>
+</main>
+</body>
+</html>

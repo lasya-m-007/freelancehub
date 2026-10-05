@@ -1,0 +1,10 @@
+:root { --fh-primary: #4f46e5; }
+body { background: #f6f7fb; }
+.navbar { background: var(--fh-primary) !important; }
+.hero { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border-radius: 1rem; }
+.stat-card .display-6 { font-weight: 700; }
+.card { border: 0; border-radius: .75rem; }
+.card.shadow-sm { box-shadow: 0 .25rem .75rem rgba(15, 23, 42, .06) !important; }
+footer { font-size: .875rem; }
+.rating-star { color: #f59e0b; }
+.table-responsive { background: #fff; border-radius: .75rem; }

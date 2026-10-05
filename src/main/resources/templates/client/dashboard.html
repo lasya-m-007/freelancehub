@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Client Dashboard - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h3 class="mb-0">Welcome, <span th:text="${currentUser.name}">Client</span></h3>
+        <a class="btn btn-primary" th:href="@{/client/projects/new}">+ Post a project</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Projects', ${totalProjects}, 'primary')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Open', ${openCount}, 'success')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('In progress', ${inProgressCount}, 'warning')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Bids received', ${totalBids}, 'dark')}"></div></div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Recent projects</h5>
+        <a th:href="@{/client/projects}">View all</a>
+    </div>
+    <div class="alert alert-light border" th:if="${recent.isEmpty()}">You have not posted any projects yet.</div>
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-3" th:each="p : ${recent}">
+            <div th:replace="~{fragments/components :: projectCard(${p}, ${bidCounts.getOrDefault(p.id, 0L)})}"></div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

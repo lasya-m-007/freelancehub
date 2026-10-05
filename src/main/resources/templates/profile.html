@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>My Profile - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card shadow-sm"><div class="card-body p-4">
+                <h3 class="mb-3">My profile</h3>
+                <p class="mb-1"><strong>Email:</strong> <span th:text="${me.email}">email</span></p>
+                <p class="mb-3"><strong>Role:</strong> <span class="badge bg-secondary" th:text="${me.role}">ROLE</span></p>
+                <form th:action="@{/profile}" method="post" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Name</label>
+                        <input class="form-control" id="name" name="name" maxlength="100" th:value="${me.name}" required>
+                        <div class="invalid-feedback">Name is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="newPassword">New password (optional)</label>
+                        <input class="form-control" type="password" id="newPassword" name="newPassword" minlength="6" maxlength="72"
+                               autocomplete="new-password">
+                        <div class="form-text">Leave blank to keep your current password.</div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                </form>
+            </div></div>
+        </div>
+        <div class="col-md-6" th:if="${me.role.name() == 'FREELANCER'}">
+            <div class="card shadow-sm"><div class="card-body p-4">
+                <h5>Ratings &amp; reviews</h5>
+                <p th:if="${me.ratingCount == 0}" class="text-muted">No reviews yet.</p>
+                <p th:if="${me.ratingCount > 0}">
+                    <span class="h3" th:text="${#numbers.formatDecimal(me.averageRating, 1, 2)}">0</span>
+                    <span class="rating-star h3">&#9733;</span>
+                    <span class="text-muted">from <span th:text="${me.ratingCount}">0</span> review(s)</span></p>
+                <div th:each="r : ${reviews}" class="border-top pt-2 mt-2">
+                    <span th:replace="~{fragments/components :: stars(${r.rating})}"></span>
+                    <span class="small text-muted">on <span th:text="${r.project.title}">project</span> by <span th:text="${r.reviewer.name}">client</span></span>
+                    <div th:if="${r.comment != null}" th:text="${r.comment}">comment</div>
+                </div>
+            </div></div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

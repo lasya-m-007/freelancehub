@@ -1,0 +1,40 @@
+# Local Docker run (Phase 8): app + MySQL on one shared network.
+#   docker compose up --build        ->  http://localhost:8080
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: freelancehub_db
+      MYSQL_USER: freelancehub
+      MYSQL_PASSWORD: freelancehub
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQLHOST: db            # service name, NOT localhost
+      MYSQLPORT: "3306"
+      MYSQLDATABASE: freelancehub_db
+      MYSQLUSER: freelancehub
+      MYSQLPASSWORD: freelancehub
+      SESSION_COOKIE_SECURE: "false"   # plain http on localhost
+      ADMIN_EMAIL: admin@freelancehub.com
+      ADMIN_PASSWORD: Admin@123
+      SEED_DEMO: "true"
+
+volumes:
+  dbdata:

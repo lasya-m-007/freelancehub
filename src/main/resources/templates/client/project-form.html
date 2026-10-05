@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Post a Project - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <div class="row justify-content-center"><div class="col-md-8">
+        <div class="card shadow-sm"><div class="card-body p-4">
+            <h3 class="mb-3">Post a project</h3>
+            <form th:action="@{/client/projects}" method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" id="title" name="title" maxlength="200" th:value="${form?.title}" required>
+                    <div class="invalid-feedback">A title is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="6" maxlength="4000" required
+                              th:text="${form?.description}"></textarea>
+                    <div class="invalid-feedback">Please describe the work.</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="categoryId">Category</label>
+                        <select class="form-select" id="categoryId" name="categoryId" required>
+                            <option value="">Choose...</option>
+                            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
+                                    th:selected="${form?.categoryId != null and form.categoryId == c.id}"></option>
+                        </select>
+                        <div class="invalid-feedback">Pick a category.</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="budget">Budget (&#8377;)</label>
+                        <input class="form-control" type="number" step="0.01" min="1" id="budget" name="budget"
+                               th:value="${form?.budget}" required>
+                        <div class="invalid-feedback">Enter a budget of at least 1.</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="deadline">Deadline</label>
+                        <input class="form-control" type="date" id="deadline" name="deadline" th:value="${form?.deadline}" required>
+                        <div class="invalid-feedback">Choose a deadline.</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Post project</button>
+                <a class="btn btn-link" th:href="@{/client/projects}">Cancel</a>
+            </form>
+        </div></div>
+    </div></div>
+</main>
+</body>
+</html>

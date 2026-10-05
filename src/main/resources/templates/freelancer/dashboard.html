@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Freelancer Dashboard - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h3 class="mb-0">Welcome, <span th:text="${me.name}">Freelancer</span></h3>
+        <a class="btn btn-primary" th:href="@{/projects}">Find projects</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Total bids', ${totalBids}, 'primary')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Pending', ${pendingCount}, 'warning')}"></div></div>
+        <div class="col-6 col-md-3"><div th:replace="~{fragments/components :: statCard('Accepted', ${acceptedCount}, 'success')}"></div></div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small text-uppercase">Rating</div>
+                <div class="display-6" th:if="${me.ratingCount > 0}">
+                    <span th:text="${#numbers.formatDecimal(me.averageRating, 1, 2)}">0</span>
+                    <span class="rating-star">&#9733;</span></div>
+                <div class="display-6 text-muted" th:if="${me.ratingCount == 0}">&mdash;</div>
+                <div class="small text-muted"><span th:text="${me.ratingCount}">0</span> review(s)</div>
+            </div></div>
+        </div>
+    </div>
+
+    <h5>My bids</h5>
+    <div class="alert alert-light border" th:if="${bids.isEmpty()}">
+        You have not bid on anything yet. <a th:href="@{/projects}">Browse open projects</a>.
+    </div>
+    <div class="table-responsive shadow-sm" th:if="${!bids.isEmpty()}">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>Project</th><th>My price</th><th>Bid status</th><th>Project status</th><th class="text-end">Action</th></tr></thead>
+            <tbody>
+            <tr th:each="b : ${bids}">
+                <td><a th:href="@{/projects/{id}(id=${b.project.id})}" th:text="${b.project.title}" class="text-decoration-none">project</a></td>
+                <td>&#8377;<span th:text="${#numbers.formatDecimal(b.amount, 1, 'COMMA', 2, 'POINT')}">0</span></td>
+                <td><span th:replace="~{fragments/components :: statusBadge(${b.status})}"></span></td>
+                <td><span th:replace="~{fragments/components :: statusBadge(${b.project.status})}"></span></td>
+                <td class="text-end">
+                    <form th:if="${b.pending}" th:action="@{/bids/{id}/withdraw(id=${b.id})}" method="post"
+                          data-confirm="Withdraw this bid?">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Withdraw</button></form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

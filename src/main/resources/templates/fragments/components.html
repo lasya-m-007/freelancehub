@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Works for ProjectStatus and BidStatus enums -->
+<span th:fragment="statusBadge(status)" class="badge"
+      th:with="s=${status.name()}"
+      th:classappend="${s == 'OPEN' or s == 'ACCEPTED'} ? 'bg-success' :
+                      (${s == 'IN_PROGRESS' or s == 'PENDING'} ? 'bg-warning text-dark' :
+                      (${s == 'COMPLETED'} ? 'bg-primary' :
+                      (${s == 'REJECTED'} ? 'bg-danger' : 'bg-secondary')))"
+      th:text="${s.replace('_', ' ')}">STATUS</span>
+
+<!-- Dashboard stat card -->
+<div th:fragment="statCard(label, value, color)" class="card stat-card shadow-sm h-100">
+    <div class="card-body">
+        <div class="text-muted small text-uppercase" th:text="${label}">Label</div>
+        <div class="display-6" th:classappend="${'text-' + color}" th:text="${value}">0</div>
+    </div>
+</div>
+
+<!-- Project card: bids may be null (hidden) -->
+<div th:fragment="projectCard(p, bids)" class="card h-100 shadow-sm">
+    <div class="card-body d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-light text-dark border" th:text="${p.category.name}">Category</span>
+            <span th:replace="~{fragments/components :: statusBadge(${p.status})}"></span>
+        </div>
+        <h5 class="card-title">
+            <a th:href="@{/projects/{id}(id=${p.id})}" th:text="${p.title}"
+               class="text-decoration-none">Title</a>
+        </h5>
+        <p class="card-text text-muted small" th:text="${#strings.abbreviate(p.description, 120)}">Description</p>
+        <div class="mt-auto small">
+            <div><strong>Budget:</strong>
+                &#8377;<span th:text="${#numbers.formatDecimal(p.budget, 1, 'COMMA', 2, 'POINT')}">0</span></div>
+            <div><strong>Deadline:</strong> <span th:text="${#temporals.format(p.deadline, 'dd MMM yyyy')}">date</span></div>
+            <div><strong>Client:</strong> <span th:text="${p.client.name}">client</span></div>
+            <div th:if="${bids != null}"><strong>Bids:</strong> <span th:text="${bids}">0</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- Star rating display -->
+<span th:fragment="stars(rating)" class="rating-star"
+      th:text="${#strings.repeat('★', rating) + #strings.repeat('☆', 5 - rating)}">*****</span>
+
+</body>
+</html>

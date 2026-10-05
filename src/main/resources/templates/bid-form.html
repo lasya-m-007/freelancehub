@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Submit a bid - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <div class="row justify-content-center"><div class="col-md-7">
+        <div class="card shadow-sm"><div class="card-body p-4">
+            <h3>Submit a bid</h3>
+            <p class="text-muted">For <a th:href="@{/projects/{id}(id=${project.id})}" th:text="${project.title}">project</a>
+                &middot; budget &#8377;<span th:text="${#numbers.formatDecimal(project.budget, 1, 'COMMA', 2, 'POINT')}">0</span></p>
+            <form th:action="@{/projects/{id}/bid(id=${project.id})}" method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label class="form-label" for="amount">Your price (&#8377;)</label>
+                    <input class="form-control" type="number" step="0.01" min="1" th:max="${project.budget}"
+                           id="amount" name="amount" th:value="${form?.amount}" required>
+                    <div class="form-text">Cannot exceed the project budget.</div>
+                    <div class="invalid-feedback">Enter an amount between 1 and the budget.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="message">Message to the client</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" maxlength="2000" required
+                              th:text="${form?.message}"></textarea>
+                    <div class="invalid-feedback">Please add a short message.</div>
+                </div>
+                <button class="btn btn-primary" type="submit">Place bid</button>
+                <a class="btn btn-link" th:href="@{/projects/{id}(id=${project.id})}">Cancel</a>
+            </form>
+        </div></div>
+    </div></div>
+</main>
+</body>
+</html>

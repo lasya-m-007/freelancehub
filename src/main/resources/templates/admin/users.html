@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Manage Users - FreelanceHub</title></head>
+<body>
+<main class="container py-3">
+    <h3 class="mb-3">Manage Users</h3>
+    <div class="table-responsive shadow-sm">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Rating</th><th>Joined</th><th class="text-end">Action</th></tr></thead>
+            <tbody>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.id}">1</td>
+                <td th:text="${u.name}">name</td>
+                <td th:text="${u.email}">email</td>
+                <td><span class="badge bg-secondary" th:text="${u.role}">ROLE</span></td>
+                <td><span th:if="${u.ratingCount > 0}" th:text="${#numbers.formatDecimal(u.averageRating, 1, 2)} + ' (' + ${u.ratingCount} + ')'">-</span>
+                    <span th:if="${u.ratingCount == 0}" class="text-muted">&mdash;</span></td>
+                <td th:text="${#temporals.format(u.createdAt, 'dd MMM yyyy')}">date</td>
+                <td class="text-end">
+                    <form th:if="${u.role.name() != 'ADMIN'}" th:action="@{/admin/users/{id}/delete(id=${u.id})}" method="post"
+                          data-confirm="Delete this user permanently?">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button></form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

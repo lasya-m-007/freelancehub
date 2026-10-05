@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Error - FreelanceHub</title></head>
+<body>
+<main class="container py-5 text-center">
+    <div class="display-3 text-muted" th:text="${status}">400</div>
+    <h2 th:text="${heading}">Something went wrong</h2>
+    <p class="text-muted" th:text="${detail}">Details</p>
+    <a class="btn btn-primary" th:href="@{/}">Back to home</a>
+</main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Sign up - FreelanceHub</title></head>
+<body>
+<main class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm"><div class="card-body p-4">
+                <h3 class="mb-3">Create your account</h3>
+                <form th:action="@{/register}" method="post" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Full name</label>
+                        <input class="form-control" id="name" name="name" maxlength="100" th:value="${form?.name}" required>
+                        <div class="invalid-feedback">Name is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" type="email" id="email" name="email" th:value="${form?.email}" required>
+                        <div class="invalid-feedback">Enter a valid email address.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-control" type="password" id="password" name="password" minlength="6" maxlength="72" required>
+                        <div class="form-text">At least 6 characters. Stored as a BCrypt hash.</div>
+                        <div class="invalid-feedback">Use at least 6 characters.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="role">I want to</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="">Choose...</option>
+                            <option value="CLIENT" th:selected="${form?.role == 'CLIENT'}">Hire freelancers (Client)</option>
+                            <option value="FREELANCER" th:selected="${form?.role == 'FREELANCER'}">Find work (Freelancer)</option>
+                        </select>
+                        <div class="invalid-feedback">Choose an account type.</div>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Sign up</button>
+                </form>
+                <p class="text-center mt-3 mb-0">Already registered? <a th:href="@{/login}">Log in</a></p>
+            </div></div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
